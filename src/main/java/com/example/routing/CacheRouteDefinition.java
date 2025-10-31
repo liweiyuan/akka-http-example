@@ -33,7 +33,7 @@ public class CacheRouteDefinition extends AllDirectives implements RouteDefiniti
                         get(() ->
                                 path(PathMatchers.segment(), key ->
                                         onSuccess(askCacheActorForValue(key), value -> {
-                                            if (value == null) {
+                                            if (value == null || value.isEmpty()) {
                                                 return complete(HttpResponse.create()
                                                         .withStatus(404)
                                                         .withEntity(ContentTypes.TEXT_PLAIN_UTF8, "未找到键: " + key));
@@ -82,6 +82,12 @@ public class CacheRouteDefinition extends AllDirectives implements RouteDefiniti
                         timeout,
                         system.scheduler()
                 )
-        ).thenApply(cacheValue -> cacheValue.value);
+        ).thenApply(cacheValue -> {
+            // 处理可能为 null 的值
+            if (cacheValue == null || cacheValue.value == null) {
+                return null;
+            }
+            return cacheValue.value;
+        });
     }
 }

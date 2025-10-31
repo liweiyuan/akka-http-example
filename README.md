@@ -37,7 +37,7 @@ src/
 │   │   └── SimpleHttpRoutes.java # 路由组合
 │   └── resources/
 └── test/
-    └── java/com/example/       # 单元测试
+    └── java/com/example/       # 单元测试和集成测试
 ```
 
 ## API 接口
@@ -59,7 +59,7 @@ src/
 
 - Java 11 或更高版本
 - Maven 3.6 或更高版本
-- Redis 服务器 (可选，用于缓存功能)
+- Redis 服务器 (用于缓存功能)
 
 ### 构建项目
 
@@ -107,6 +107,16 @@ curl -X POST http://localhost:8080/post/testparam \
   -d '{"field1":"value1","field2":123}'
 ```
 
+## 测试
+
+项目包含多种类型的测试：
+
+1. **单元测试** - 针对单个组件（如 Actor）的测试
+2. **路由测试** - 针对 HTTP 路由定义的测试
+3. **集成测试** - 针对完整 HTTP 接口的端到端测试
+
+运行测试时需要 Redis 服务，测试会自动连接到本地 Redis 实例。
+
 ## 架构说明
 
 项目采用 Actor 模型进行设计：
@@ -115,6 +125,23 @@ curl -X POST http://localhost:8080/post/testparam \
 2. `CacheActor` - 本地缓存 Actor，提供两级缓存机制
 3. `RedisActor` - Redis 连接 Actor，处理与 Redis 的交互
 4. 各种路由定义类处理 HTTP 请求
+
+系统使用两级缓存机制：
+- 本地缓存：快速响应，避免频繁访问 Redis
+- Redis 缓存：持久化存储，支持分布式部署
+
+当请求一个键值时：
+1. 首先在本地缓存中查找
+2. 如果未找到，则查询 Redis
+3. Redis 查询结果会更新到本地缓存中
+4. 后续相同键的请求可直接从本地缓存获取
+
+## CI/CD
+
+项目使用 GitHub Actions 进行持续集成和持续部署。工作流包括：
+- 代码编译检查
+- 单元测试和集成测试运行（包含 Redis 服务）
+- 应用程序打包
 
 ## 许可证
 

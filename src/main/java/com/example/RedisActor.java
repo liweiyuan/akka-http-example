@@ -17,7 +17,7 @@ public class RedisActor extends AbstractBehavior<CacheActor.Command> {
         super(context);
         this.context = context;
         try {
-            this.jedis = new Jedis("192.168.2.212", 6379);
+            this.jedis = new Jedis("127.0.0.1", 6379);
             context.getLog().info("成功连接到 Redis");
         } catch (JedisConnectionException e) {
             context.getLog().error("无法连接到 Redis", e);
