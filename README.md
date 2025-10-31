@@ -87,6 +87,12 @@ mvn exec:java
 mvn exec:java@default-cli -Dexec.mainClass="com.example.CacheBenchmark"
 ```
 
+或者使用完整的命令：
+
+```bash
+mvn clean compile test-compile exec:java -Dexec.mainClass="com.example.CacheBenchmark" -Dexec.classpathScope=test
+```
+
 ## 使用示例
 
 启动服务器后，可以使用以下命令测试 API：
@@ -114,6 +120,7 @@ curl -X POST http://localhost:8080/post/testparam \
 1. **单元测试** - 针对单个组件（如 Actor）的测试
 2. **路由测试** - 针对 HTTP 路由定义的测试
 3. **集成测试** - 针对完整 HTTP 接口的端到端测试
+4. **性能基准测试** - 使用 JMH 进行的性能测试
 
 运行测试时需要 Redis 服务，测试会自动连接到本地 Redis 实例。
 
@@ -141,6 +148,8 @@ curl -X POST http://localhost:8080/post/testparam \
 项目使用 GitHub Actions 进行持续集成和持续部署。工作流包括：
 - 代码编译检查
 - 单元测试和集成测试运行（包含 Redis 服务）
+- HTTP 接口测试（使用 curl）
+- 性能基准测试
 - 应用程序打包
 
 ## 许可证
