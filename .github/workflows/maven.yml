@@ -107,10 +107,4 @@ jobs:
           kill $SERVER_PID
         fi
       if: always()
-      
-    - name: Run JMH Benchmark
-      run: |
-        mvn clean compile test-compile exec:java -Dexec.mainClass="com.example.CacheBenchmark" -Dexec.classpathScope=test
-      
-    - name: Package application
-      run: mvn -B package --file pom.xml -DskipTests
+    
