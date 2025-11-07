@@ -12,21 +12,21 @@ import java.time.Duration;
 
 public class SimpleHttpRoutes extends AllDirectives {
 
-    private final ActorRef<SupervisorActor.Command> supervisor;
-    private final ActorSystem<SupervisorActor.Command> system;
-    private final Duration timeout;
+  private final ActorRef<SupervisorActor.Command> supervisor;
+  private final ActorSystem<SupervisorActor.Command> system;
+  private final Duration timeout;
 
-    public SimpleHttpRoutes(ActorSystem<SupervisorActor.Command> system, ActorRef<SupervisorActor.Command> supervisor) {
-        this.system = system;
-        this.supervisor = supervisor;
-        this.timeout = Duration.ofSeconds(5);
-    }
+  public SimpleHttpRoutes(
+      ActorSystem<SupervisorActor.Command> system, ActorRef<SupervisorActor.Command> supervisor) {
+    this.system = system;
+    this.supervisor = supervisor;
+    this.timeout = Duration.ofSeconds(5);
+  }
 
-    public Route createRoute() {
-        return concat(
-                new HelloRouteDefinition().createRoute(),
-                new CacheRouteDefinition(system, supervisor).createRoute(),
-                new PostRouteDefinition(system).createRoute()
-        );
-    }
+  public Route createRoute() {
+    return concat(
+        new HelloRouteDefinition().createRoute(),
+        new CacheRouteDefinition(system, supervisor).createRoute(),
+        new PostRouteDefinition(system).createRoute());
+  }
 }

@@ -7,14 +7,17 @@ import akka.http.javadsl.server.Route;
 
 public class HelloRouteDefinition extends AllDirectives implements RouteDefinition {
 
-    @Override
-    public Route createRoute() {
-        return path("hello", () ->
-                get(() ->
-                        complete(HttpResponse.create()
-                                .withStatus(200)
-                                .withEntity(ContentTypes.TEXT_PLAIN_UTF8, "Hello World from Akka HTTP!"))
-                )
-        );
-    }
+  @Override
+  public Route createRoute() {
+    return path(
+        "hello",
+        () ->
+            get(
+                () ->
+                    complete(
+                        HttpResponse.create()
+                            .withStatus(200)
+                            .withEntity(
+                                ContentTypes.TEXT_PLAIN_UTF8, "Hello World from Akka HTTP!"))));
+  }
 }
